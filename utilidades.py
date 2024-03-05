@@ -1,5 +1,5 @@
+from typing import Optional, Union
 from subprocess import call
-from typing import Optional
 import re
 
 
@@ -36,9 +36,17 @@ def seleccionar_opcion(opciones: list[str], valores: Optional[list] = None) -> a
     return opcion
 
 
-def seleccionar_opcion_en_lista(opciones: list[str]) -> any:
+def seleccionar_opcion_en_lista(
+        opciones: list[str], valores: Optional[list] = None, instrucciones: str = ""
+) -> any:
     if not opciones:
         return None
+
+    if valores is not None and len(opciones) != len(valores):
+        raise ValueError("La lista de opciones debe ser del mismo tamaño que la de valores")
+
+    if instrucciones:
+        print(instrucciones)
 
     seleccionables = []
     for i, v in zip(range(1, len(opciones) + 1), opciones):
@@ -46,7 +54,11 @@ def seleccionar_opcion_en_lista(opciones: list[str]) -> any:
         print(f"{i}. {v}")
 
     print("Selecciona una opción")
-    return seleccionar_opcion(seleccionables, opciones)
+    seleccion = seleccionar_opcion(seleccionables, opciones)
+    if valores is not None:
+        return valores[opciones.index(seleccion)]
+
+    return seleccion
 
 
 def obtener_natural(permitir_cero: bool) -> int:
@@ -122,6 +134,20 @@ def nuevo_alfabeto(requerido: bool) -> tuple[Optional[list[str]], Optional[bool]
     return alfabeto, elemento_compuesto
 
 
+def palabra_pertenece_a_alfabeto(alfabeto: list[str], palabra: str) -> bool:
+    caracteres_no_permitidos = []
+
+    for c in palabra:
+        if c not in alfabeto:
+            caracteres_no_permitidos.append(c)
+
+    if caracteres_no_permitidos:
+        print(f"Los caracteres {caracteres_no_permitidos} no pertenecen al alfabeto dado")
+        return False
+
+    return True
+
+
 def obtener_palabra_de_alfabeto(alfabeto: list[str], nombre: str, palabra: Optional[str] = None) -> str:
     do_one = palabra is not None
     if not do_one:
@@ -133,17 +159,56 @@ def obtener_palabra_de_alfabeto(alfabeto: list[str], nombre: str, palabra: Optio
             print(f"Ingresa la palabra {nombre}")
             palabra = input("> ")
 
-        caracteres_no_permitidos = []
-
-        for c in palabra:
-            if c not in alfabeto:
-                caracteres_no_permitidos.append(c)
-                palabra = ""
-
-        if caracteres_no_permitidos:
-            print(f"Los caracteres {caracteres_no_permitidos} no pertenecen al alfabeto dado")
+        if not palabra_pertenece_a_alfabeto(alfabeto, palabra):
+            palabra = ""
 
     return palabra
+
+
+def obtener_lenguaje(alfabeto: list[str], nombre: str, permitir_vacio=False) -> list[str]:
+    print(f"Ingresa las palabras del alfabeto {nombre}")
+    print("  Ingresa una cadena vacía para terminar")
+
+    lenguaje = []
+    while True:
+        print(f"{len(lenguaje)} palabras ingresadas para {nombre}")
+        palabra = input("> ")
+        if not palabra:
+            if permitir_vacio:
+                print("Se requiere de al menos un elemento!")
+                continue
+            break
+
+        if not palabra_pertenece_a_alfabeto(alfabeto, palabra):
+            continue
+
+        lenguaje.append(palabra)
+        limpiar_pantalla()
+
+    return lenguaje
+
+
+def potenciar_elementos(elementos: Union[str, list], exponente: int) -> str:
+    potencia = elementos * abs(exponente)
+
+    if exponente < 0:
+        if isinstance(elementos, list):
+            for i, e in elementos:
+                elementos[i] = e[::1]
+
+        return potencia[::-1]
+
+    return potencia
+
+
+def set_potencia(opciones: list[str], valores: list, nombre: str):
+    seleccion = seleccionar_opcion_en_lista(opciones, valores, "Potenciar ...")
+
+    print("Ingresa el exponente")
+    exp = obtener_entero()
+
+    print(f"  {nombre} = %a" % seleccion)
+    print(potenciar_elementos(seleccion, exp))
 
 
 def numero_separado_por_comas(numero: int) -> str:

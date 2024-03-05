@@ -35,18 +35,6 @@ def redefinir_datos():
         print("Se ha definido w2 como %a" % w2)
 
 
-def seleccionar_palabra(instrucciones: str) -> bool:
-    print(instrucciones)
-    print("1. w1")
-    print("2. w2")
-    print("Selecciona una opción")
-    seleccion = utilidades.seleccionar_opcion(["1", "2"], [True, False])
-
-    utilidades.limpiar_pantalla()
-
-    return seleccion
-
-
 def prefijos_y_sufijos(cadena: str) -> str:
     prefijo_base, sufijo_base = cadena, cadena
     prefijos, sufijos = ["Prefijos"], ["Sufijos"]
@@ -64,26 +52,9 @@ def prefijos_y_sufijos(cadena: str) -> str:
 
 
 def set_prefijos_sufijos():
-    usar_w1 = seleccionar_palabra("Obtener los prefijos y sufijos de ...")
-    print("  w = %a" % (w1 if usar_w1 else w2))
-    print(prefijos_y_sufijos(w1 if usar_w1 else w2))
-
-
-def potenciar_cadena(cadena: str, exponente: int) -> str:
-    potencia = cadena * abs(exponente)
-    if exponente < 0:
-        return potencia[::-1]
-    return potencia
-
-
-def set_potencia():
-    usar_w1 = seleccionar_palabra("Potenciar ...")
-
-    print("Ingresa el exponente")
-    exp = utilidades.obtener_entero()
-
-    print("  w = %a" % (w1 if usar_w1 else w2))
-    print(potenciar_cadena(w1 if usar_w1 else w2, exp))
+    palabra = utilidades.seleccionar_opcion_en_lista(["w1", "w2"], [w1, w2], "Obtener los prefijos y sufijos de ...")
+    print("  w = %a" % palabra)
+    print(prefijos_y_sufijos(palabra))
 
 
 def contar_simbolo(cadena: str, simbolo: str) -> int:
@@ -93,12 +64,12 @@ def contar_simbolo(cadena: str, simbolo: str) -> int:
 def set_contar_simbolo():
     global alfabeto
 
-    usar_w1 = seleccionar_palabra("Evaluar ...")
+    palabra = utilidades.seleccionar_opcion_en_lista(["w1", "w2"], [w1, w2], "Obtener los prefijos y sufijos de ...")
 
     print("Símbolos disponibles")
     simbolo = utilidades.seleccionar_opcion_en_lista(alfabeto)
 
-    print(f" |w|{simbolo} =", contar_simbolo(w1 if usar_w1 else w2, simbolo))
+    print(f" |w|{simbolo} =", contar_simbolo(palabra, simbolo))
 
 
 def menu_uno():
@@ -173,7 +144,7 @@ def menu_dos():
     elif seleccion == "7":
         print("|w1•w2| =", len(w1 + w2))
     elif seleccion == "8":
-        set_potencia()
+        utilidades.set_potencia(["w1", "w2"], [w1, w2], "w")
     elif seleccion == "9":
         set_contar_simbolo()
 
