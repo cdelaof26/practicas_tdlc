@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print("  Práctica 3 - Operaciones con alfabetos")
     print(" De La O Flores Cristopher - 4CV1\n")
 
-    alfabeto, _ = utilidades.nuevo_alfabeto(True)
+    alfabeto, _ = utilidades.nuevo_conjunto(True)
     l1, l2 = utilidades.obtener_lenguaje(alfabeto, "l1"), utilidades.obtener_lenguaje(alfabeto, "l2")
 
     print("L1 U L2:", l1 + l2)

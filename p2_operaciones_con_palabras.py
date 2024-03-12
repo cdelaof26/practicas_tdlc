@@ -20,7 +20,7 @@ def redefinir_datos():
 
     utilidades.limpiar_pantalla()
 
-    _alfabeto, _ = utilidades.nuevo_alfabeto(True)
+    _alfabeto, _ = utilidades.nuevo_conjunto(True)
     if _alfabeto is None:
         return
 
@@ -97,7 +97,7 @@ def menu_uno():
             w1 = utilidades.obtener_palabra_de_alfabeto(alfabeto, "w1")
             w2 = utilidades.obtener_palabra_de_alfabeto(alfabeto, "w2")
     elif seleccion == "2":
-        alfabeto, _ = utilidades.nuevo_alfabeto(True)
+        alfabeto, _ = utilidades.nuevo_conjunto(True)
     else:
         exit(0)
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     print("  Práctica 2 - Operaciones con palabras")
     print(" De La O Flores Cristopher - 4CV1\n")
 
-    alfabeto, _ = utilidades.nuevo_alfabeto(True)
+    alfabeto, _ = utilidades.nuevo_conjunto(True)
     w1, w2 = "", ""
 
     while True:

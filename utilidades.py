@@ -1,4 +1,5 @@
 from typing import Optional, Union
+from datetime import datetime
 from subprocess import call
 import re
 
@@ -119,19 +120,19 @@ def obtener_alfabeto(como_lista: bool) -> tuple[list[str], bool]:
     return obtener_lista_como_alfabeto()
 
 
-def nuevo_alfabeto(requerido: bool) -> tuple[Optional[list[str]], Optional[bool]]:
-    print("Obtención del alfabeto")
+def nuevo_conjunto(requerido: bool, elemento="alfabeto") -> tuple[Optional[list[str]], Optional[bool]]:
+    print(f"Obtención del {elemento}")
     print("1. Seleccionar todos los caracteres en una cadena")
     print("2. Ingresar los elementos uno por uno")
     print("Selecciona una opción")
     seleccion = seleccionar_opcion(["1", "2"], [False, True])
-    alfabeto, elemento_compuesto = obtener_alfabeto(seleccion)
+    conjunto, elemento_compuesto = obtener_alfabeto(seleccion)
 
-    if not alfabeto and requerido:
-        print("No se ingreso un alfabeto, terminando...")
+    if not conjunto and requerido:
+        print(f"No se ingreso un {elemento}, terminando...")
         return None, None
 
-    return alfabeto, elemento_compuesto
+    return conjunto, elemento_compuesto
 
 
 def palabra_pertenece_a_alfabeto(alfabeto: list[str], palabra: str) -> bool:
@@ -188,6 +189,40 @@ def obtener_lenguaje(alfabeto: list[str], nombre: str, permitir_vacio=False) -> 
     return lenguaje
 
 
+def reducir_magnitud(tam_en_bytes: int) -> tuple[int, str]:
+    prefijos = ["B", "KB", "MB", "GB", "TB"]
+    index_prefijo = 0
+
+    while tam_en_bytes > 1000:
+        tam_en_bytes /= 1000
+
+        if index_prefijo + 1 < len(prefijos):
+            index_prefijo += 1
+        else:
+            break
+
+    return tam_en_bytes, prefijos[index_prefijo]
+
+
+def continuar_operacion(elementos: int, tam: int, prefijo: str) -> bool:
+    if (tam > 500 and prefijo == "MB") or prefijo == "GB" \
+            or prefijo == "TB" or (not prefijo and elementos > 10 ** 6):
+        if prefijo:
+            print(f"La operación requiere de %.2f {prefijo} de espacio en memoria" % tam)
+        else:
+            cantidad_de_elementos = numero_separado_por_comas(elementos)
+            print("  No es posible obtener una estimación del espacio en memoria que se requiere.")
+            print(f"El alfabeto potenciado tendrá un total de {cantidad_de_elementos} elementos")
+
+        print("  ¿Continuar con la operación?")
+        print("1. Si")
+        print("2. No, cancelar")
+        print("Selecciona una opción")
+        return seleccionar_opcion(["1", "2"], [True, False])
+
+    return True
+
+
 def potenciar_elementos(elementos: Union[str, list], exponente: int) -> str:
     potencia = elementos * abs(exponente)
 
@@ -234,3 +269,35 @@ def mostrar_proceso_terminado(ex: bool = False):
         print("\n    Proceso interrumpido!")
 
     input(" Presiona enter para continuar ")
+
+
+def guardar(datos: list[str], usar_llaves: bool = False):
+    nombre = datetime.now().strftime("%y_%m_%d %H.%M.%S") + ".txt"
+
+    with open(nombre, "w") as fichero:
+        if usar_llaves:
+            cadena = ", \n".join(datos)
+            cadena = "{" + cadena + "}"
+        else:
+            cadena = "\n".join(datos)
+        fichero.write(cadena)
+
+    print(" Guardado como:", nombre)
+
+
+def mostrar_o_guardar_datos(datos: list[str], nombre: str, usar_llaves: bool = False):
+    print("Operación terminanada!")
+    print("1. Mostrar nuevo conjunto")
+    print("2. Guardar nuevo conjunto")
+    print("S. Salir")
+    print("Selecciona una opción")
+    seleccion = seleccionar_opcion(["1", "2", "S"])
+
+    if seleccion == "1":
+        cadena = str(datos)
+        if usar_llaves:
+            cadena = str(datos).replace("'", "").replace("[", "{").replace("]", "}")
+
+        print(nombre, "=", cadena)
+    elif seleccion == "2":
+        guardar(datos, usar_llaves)

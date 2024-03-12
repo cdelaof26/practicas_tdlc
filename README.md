@@ -19,7 +19,8 @@ $ cd practicas_tdlc
 
 # Ejecutar la práctica
 $ python3 p[#]*
-#   Donde  [#] es el número de la práctica, por ejemplo
+
+#   Donde [#] es el número de la práctica, por ejemplo
 #   si quisieramos ejecutar la práctica 1, podríamos:
 #   $ python3 p1*
 </pre>
