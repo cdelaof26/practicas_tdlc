@@ -1,5 +1,4 @@
 import utilidades
-import re
 
 
 alfabeto: list[str]
