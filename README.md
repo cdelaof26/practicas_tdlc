@@ -14,7 +14,7 @@ Todos los derechos reservados [@cdelaof26](https://github.com/cdelaof26/).
 Para ejecutar los programas:
 
 <pre>
-# Entrar al directorio
+# Ingresar al directorio del proyecto 
 $ cd practicas_tdlc
 
 # Ejecutar la práctica

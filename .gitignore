@@ -1,5 +1,6 @@
 __pycache__
 
+stack.py
 *.DS_Store
 
 .idea
